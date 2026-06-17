@@ -1,0 +1,28 @@
+# Sécurité : NE JAMAIS publier les clés API
+.env
+
+# Base de données vectorielle locale (générée automatiquement, trop lourde pour Git)
+chroma_video_db/
+
+# Fichiers d'analyse temporaires ou sauvegardes locales
+*.md
+!README.md
+
+# Python (fichiers de cache compilés)
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Streamlit (fichiers de configuration locale)
+.streamlit/
+
+# Système d'exploitation
+.DS_Store
+Thumbs.db
