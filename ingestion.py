@@ -76,7 +76,7 @@ def ingerer_dans_chroma(texte_analyse, chemin_source):
 
     
     # 4. On sauvegarde la base de données dans un dossier local
-    dossier_db = "C:/Users/Elitebook 840 G6/Downloads/chroma_video_db"
+    dossier_db = "C:/Users/Elitebook 840 G6/Downloads/transcriptor/chroma_video_db"
     
     vectordb = Chroma.from_documents(
         documents=documents,
