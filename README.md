@@ -1,4 +1,4 @@
-🎥 Transcriptor - Assistant RAG Vidéo Multimodal
+## 🎥 Transcriptor - Assistant RAG Vidéo Multimodal
 
 ![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=Streamlit&logoColor=white)
 ![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
@@ -9,7 +9,6 @@
 
 **Transcriptor** est une application web interactive propulsée par l'Intelligence Artificielle qui permet d'analyser des fichiers vidéo et de dialoguer avec leur contenu. En combinant la puissance de l'analyse multimodale et la vitesse de l'inférence via Groq, l'application transforme n'importe quelle vidéo en une base de connaissances interrogeable en temps réel.
 
-🔗 **[Découvrir l'application en direct sur Streamlit](https://transcriptor1.streamlit.app)**
 
 ---
 
@@ -46,8 +45,7 @@ Ce projet implémente une architecture hybride Cloud/Local pour optimiser à la 
    ```bash
    git clone [https://github.com/Ronel7/transcriptor.git](https://github.com/Ronel7/transcriptor.git)
    cd transcriptor
-Créer un environnement virtuel (Recommandé) :Bashpython -m venv venv
-source venv/bin/activate  # Sur Windows : venv\Scripts\activate
+Créer un environnement virtuel (Recommandé) :
 Installer les dépendances :Bashpip install -r requirements.txt
 Configuration des variables d'environnement :Créez un fichier .env à la racine du projet et ajoutez vos clés :Extrait de codeAPI_KEY=votre_cle_api_google_gemini
 GROQ_API_KEY=votre_cle_api_groq
