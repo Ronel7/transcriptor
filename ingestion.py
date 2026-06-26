@@ -90,7 +90,7 @@ def ingerer_dans_chroma(texte_analyse, chemin_source):
 # --- Exécution ---
 if __name__ == "__main__":
     try: 
-        chemin_video = "chemin_video"
+        chemin_video = "C:/Users/Elitebook 840 G6/Downloads/Video2.mp4"
         
         # 1. On extrait le texte de la vidéo
         resultat_texte = analyser_video(chemin_video)
