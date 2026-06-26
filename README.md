@@ -1,100 +1,58 @@
----
-title: Transcriptor
-emoji: 🎥
-colorFrom: indigo
-colorTo: purple
-sdk: streamlit
-sdk_version: "1.35.0"
-app_file: main.py
-pinned: false
----
+Markdown# 🎥 Transcriptor - Assistant RAG Vidéo Multimodal
 
-# 🎥 Transcriptor — Assistant Intelligent d'Analyse Vidéo
+![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=Streamlit&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![LangChain](https://img.shields.io/badge/LangChain-1C3C3C?style=for-the-badge&logo=langchain&logoColor=white)
+![Groq](https://img.shields.io/badge/Groq-F55036?style=for-the-badge&logo=groq&logoColor=white)
+![Gemini](https://img.shields.io/badge/Google_Gemini-4285F4?style=for-the-badge&logo=google&logoColor=white)
+![ChromaDB](https://img.shields.io/badge/ChromaDB-FF6F00?style=for-the-badge&logo=database&logoColor=white)
 
-Dépose une vidéo, obtiens instantanément sa transcription complète, son résumé, et discute avec son contenu grâce à l'IA.
+**Transcriptor** est une application web interactive propulsée par l'Intelligence Artificielle qui permet d'analyser des fichiers vidéo et de dialoguer avec leur contenu. En combinant la puissance de l'analyse multimodale et la vitesse de l'inférence via Groq, l'application transforme n'importe quelle vidéo en une base de connaissances interrogeable en temps réel.
 
-## Fonctionnalités
-
-- **Transcription multimodale** via Gemini 2.5 Flash (audio + description visuelle avec horodatages)
-- **Résumé automatique** : points clés et synthèse extraits à l'ingestion
-- **Chat RAG** : pose des questions libres sur le contenu, l'IA répond en se basant uniquement sur ta vidéo
-- **Transcription complète à la demande** : demande "donne-moi la transcription complète" pour tout récupérer
-- **Stockage persistant** : la base vectorielle survit aux redémarrages (dossier `/data` sur HuggingFace Spaces)
-
-## Stack technique
-
-| Rôle | Outil |
-|---|---|
-| Transcription & analyse vidéo | Gemini 2.5 Flash |
-| Embeddings vectoriels | BAAI/bge-m3 (local, CPU) |
-| Base vectorielle | ChromaDB |
-| Chat RAG | Groq — Llama 3.3 70B |
-| Interface | Streamlit |
+🔗 **[Découvrir l'application en direct sur Streamlit](https://transcriptor1.streamlit.app)**
 
 ---
 
-## Déploiement sur HuggingFace Spaces
+## ✨ Fonctionnalités Principales
 
-### 1. Créer le Space
-
-1. Va sur [huggingface.co/new-space](https://huggingface.co/new-space)
-2. Choisis **Streamlit** comme SDK
-3. Choisis **Persistent Storage** (obligatoire pour que ChromaDB survive aux redémarrages)
-
-### 2. Configurer les secrets
-
-Dans ton Space → **Settings → Variables and Secrets**, ajoute :
-
-| Nom | Valeur |
-|---|---|
-| `GEMINI_API_KEY` | Ta clé Google AI Studio |
-| `GROQ_API_KEY` | Ta clé Groq Console |
-
-### 3. Pousser le code
-
-```bash
-# Clone ton Space HuggingFace
-git clone https://huggingface.co/spaces/TON_USERNAME/TON_SPACE
-cd TON_SPACE
-
-# Copie les fichiers du projet
-cp /chemin/vers/main.py .
-cp /chemin/vers/requirements.txt .
-cp /chemin/vers/README.md .
-
-# Push
-git add .
-git commit -m "initial deploy"
-git push
-```
-
-Le Space se construit automatiquement. Attends ~3-5 min (téléchargement du modèle bge-m3 ~1.2 Go au premier démarrage).
+* **🧠 Extraction Multimodale Complète :** Transcrit l'audio, décrit les actions visuelles clés, et génère un résumé structuré avec horodatages grâce à Gemini 2.5 Flash.
+* **⚡ Chatbot RAG Ultra-Rapide :** Posez des questions en langage naturel sur la vidéo. Les réponses sont générées par **Llama-3.3-70b** via l'API Groq, offrant une latence quasi-nulle.
+* **🔎 Traçabilité des Sources :** Chaque réponse générée s'accompagne d'un menu déroulant permettant de visualiser les fragments exacts de la transcription (chunks) utilisés par le modèle.
+* **🎯 Détection d'Intention :** L'application comprend quand l'utilisateur demande "la transcription complète" et court-circuite le RAG pour livrer le document intégral instantanément.
+* **🎨 UI/UX Moderne :** Interface fluide conçue avec Streamlit, intégrant un historique de chat persistant façon messagerie, un autoscroll intelligent, et des composants visuels épurés.
 
 ---
 
-## Installation locale
+## 🏗️ Architecture Technique (Pipeline RAG)
 
-```bash
-git clone https://huggingface.co/spaces/TON_USERNAME/TON_SPACE
-cd TON_SPACE
-pip install -r requirements.txt
-```
+Ce projet implémente une architecture hybride Cloud/Local pour optimiser à la fois les coûts, la vitesse et la précision :
 
-Crée un fichier `.env` à la racine :
+1. **Phase d'Ingestion (Google GenAI) :** La vidéo uploadée est envoyée à l'API Gemini. Le modèle visionne le fichier et génère un document Markdown exhaustif (transcription, descriptions visuelles, points clés).
+2. **Phase d'Indexation (LangChain & ChromaDB) :** Le document est découpé en fragments (`RecursiveCharacterTextSplitter` avec overlap) pour conserver le contexte. Ces fragments sont vectorisés localement par le modèle **HuggingFace `BAAI/bge-m3`** (optimisé CPU) et stockés dans une base de données ChromaDB.
+3. **Phase de Génération (Groq) :** Lorsqu'une question est posée, ChromaDB effectue une recherche de similarité pour isoler le contexte pertinent. Ce contexte est envoyé au modèle open-source **Llama-3.3-70b-versatile** exécuté sur les LPU (Language Processing Units) de Groq pour une inférence extrêmement rapide.
 
-```
-GEMINI_API_KEY=AIza...
-GROQ_API_KEY=gsk_...
-```
+---
 
-Lance l'app :
+## 🚀 Installation & Déploiement Local
 
-```bash
-streamlit run main.py
-```
+### Prérequis
+* Python 3.9+
+* Un compte [Google AI Studio](https://aistudio.google.com/) (pour la clé API Gemini)
+* Un compte [Groq Console](https://console.groq.com/) (pour la clé API Groq)
 
-> Au premier lancement, le modèle d'embedding `bge-m3` (~1.2 Go) est téléchargé automatiquement. Les lancements suivants sont instantanés.
+### Étapes d'installation
 
-## Limite de taille vidéo
+1. **Cloner le dépôt :**
+   ```bash
+   git clone [https://github.com/Ronel7/transcriptor.git](https://github.com/Ronel7/transcriptor.git)
+   cd transcriptor
+Créer un environnement virtuel (Recommandé) :Bashpython -m venv venv
+source venv/bin/activate  # Sur Windows : venv\Scripts\activate
+Installer les dépendances :Bashpip install -r requirements.txt
+Configuration des variables d'environnement :Créez un fichier .env à la racine du projet et ajoutez vos clés :Extrait de codeAPI_KEY=votre_cle_api_google_gemini
+GROQ_API_KEY=votre_cle_api_groq
+Lancer l'application :Bashstreamlit run main.py
 
-Gemini accepte les fichiers jusqu'à **2 Go**. Pour les vidéos très longues, extrais l'audio en MP3 d'abord pour réduire la taille.
+
+💻 Exemples d'utilisation
+Une fois une vidéo indexée (ex: une conférence, un cours, un tutoriel), essayez les prompts suivants :"Donne-moi la transcription complète.""Fais-moi un résumé en 3 points de cette vidéo.""Que se passe-t-il à la minute 02:15 ?""Quels sont les concepts techniques abordés par le présentateur ?"🛠️ Stack Technologique DétailléeComposantTechnologie UtiliséeFrontend UIStreamlitFramework LLMLangChainModèle Vision / ExtractionGoogle Gemini 2.5 FlashModèle Chat / RaisonnementLlama 3.3 70B (via Groq)Modèle d'EmbeddingHuggingFace BAAI/bge-m3Base de Données VectorielleChromaDB (Local persistant)
