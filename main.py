@@ -33,7 +33,13 @@ st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 html, body, [class*="css"] { font-family: 'Inter', sans-serif; }
-#MainMenu, footer, header { visibility: hidden; }
+
+/* FIX : On cache le menu et le footer, mais PAS le header entier */
+#MainMenu, footer { visibility: hidden; }
+
+/* On rend le header transparent pour que le bouton ">" reste cliquable sur fond sombre */
+header { background-color: transparent !important; }
+div[data-testid="stHeader"] { background: transparent !important; }
 
 .stApp { background: #0f0f13; color: #e0e0f0; }
 .block-container { padding: 2rem 2rem 6rem 2rem; } /* padding-bottom pour la barre fixe */
@@ -85,6 +91,7 @@ details summary { color: #8888aa !important; font-size: 0.82rem !important; }
 hr { border-color: #1e1e2e; margin: 1rem 0; }
 </style>
 """, unsafe_allow_html=True)
+
 
 # ─── SESSION STATE ─────────────────────────────────────────────────────────────
 if "chat_history" not in st.session_state:
